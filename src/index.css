@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-slate-800;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break-avoid {
+    page-break-inside: avoid;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* PDF export: compact layout to fit 1 A4 page */
+.printing-layout {
+  overflow: visible !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.printing-layout .pb-12 {
+  padding-bottom: 0 !important;
+}
+
+.printing-layout .px-6 {
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+.printing-layout .mb-6 {
+  margin-bottom: 6px !important;
+}
+
+.printing-layout .mb-4 {
+  margin-bottom: 4px !important;
+}
+
+.printing-layout .gap-4 {
+  gap: 6px !important;
+}
+
+.printing-layout .p-5,
+.printing-layout .p-6 {
+  padding: 6px !important;
+}
+
+.printing-layout h1 {
+  font-size: 1rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 4px !important;
+}
+
+.printing-layout h3 {
+  font-size: 0.7rem !important;
+}
+
+.printing-layout .text-2xl {
+  font-size: 0.95rem !important;
+}
+
+.printing-layout .text-sm {
+  font-size: 0.65rem !important;
+}
+
+.printing-layout .chart-area {
+  height: 130px !important;
+}
+
+.printing-layout .lg\:grid-cols-4,
+.printing-layout .md\:grid-cols-2 {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.printing-layout .md\:grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.printing-layout .pdf-main-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.printing-layout .pdf-main-grid > * {
+  margin-bottom: 0 !important;
+}
+
+.printing-layout .shadow-sm {
+  box-shadow: none !important;
+}
+
+.printing-layout th,
+.printing-layout td {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+.printing-layout canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
