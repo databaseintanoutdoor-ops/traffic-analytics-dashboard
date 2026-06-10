@@ -121,3 +121,21 @@
   max-width: 100% !important;
   height: auto !important;
 }
+
+.printing-layout .report-header {
+  padding: 4px !important;
+  margin-bottom: 4px !important;
+}
+
+.printing-layout .report-header__image-wrap {
+  width: 160px !important;
+  height: 120px !important;
+  max-width: 100% !important;
+  aspect-ratio: 4 / 3 !important;
+}
+
+.printing-layout .report-header__image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}

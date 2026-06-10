@@ -15,6 +15,7 @@ function App() {
   const [metrics, setMetrics] = useState(null);
   const [formData, setFormData] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [reportImage, setReportImage] = useState(null);
   const reportRef = useRef(null);
 
   const handleGenerate = (data) => {
@@ -86,6 +87,8 @@ function App() {
         onGenerate={handleGenerate} 
         onExportPDF={handleExportPDF}
         isGenerating={isGenerating}
+        reportImage={reportImage}
+        onImageChange={setReportImage}
       />
       
       {reportData && metrics && formData && (
@@ -95,10 +98,11 @@ function App() {
             project={formData.project}
             startDate={formData.startDate}
             endDate={formData.endDate}
+            image={reportImage}
           />
           
           <MetricCards metrics={metrics} />
-          
+
           <div className="pdf-main-grid">
             <VehicleTypeTable data={reportData.traffic} />
             <DayOfWeekChart data={reportData.dayOfWeek} />

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { RefreshCw, Download } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { RefreshCw, Download, ImagePlus, X } from 'lucide-react';
 import { DEFAULT_VEHICLE_BREAKDOWN } from '../utils/trafficGenerator';
 
 const VEHICLE_TYPES = [
@@ -9,7 +9,10 @@ const VEHICLE_TYPES = [
   { key: 'bus', label: 'Bus %' },
 ];
 
-const ControlPanel = ({ onGenerate, onExportPDF, isGenerating }) => {
+const MAX_IMAGE_SIZE_MB = 5;
+
+const ControlPanel = ({ onGenerate, onExportPDF, isGenerating, reportImage, onImageChange }) => {
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     location: 'BSI Zainul Arifin Medan',
     project: 'BSI MEDAN',
@@ -40,6 +43,31 @@ const ControlPanel = ({ onGenerate, onExportPDF, isGenerating }) => {
 
   const breakdownTotal = Object.values(formData.vehicleBreakdown).reduce((sum, value) => sum + value, 0);
   const isBreakdownValid = Math.abs(breakdownTotal - 100) < 0.01;
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      window.alert('Hanya file gambar yang diperbolehkan (JPG, PNG, WEBP, dll).');
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+      window.alert(`Ukuran gambar maksimal ${MAX_IMAGE_SIZE_MB} MB.`);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => onImageChange(reader.result);
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const handleRemoveImage = () => {
+    onImageChange(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const handleGenerate = () => {
     if (!isBreakdownValid) return;
@@ -138,6 +166,47 @@ const ControlPanel = ({ onGenerate, onExportPDF, isGenerating }) => {
           {!isBreakdownValid && (
             <p className="text-sm text-red-600 mt-2">Total persentase harus sama dengan 100%.</p>
           )}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-700 mb-3">Foto Lokasi (untuk PDF)</h3>
+          <div className="flex flex-wrap items-start gap-4">
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="report-image-upload"
+              />
+              <label
+                htmlFor="report-image-upload"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors cursor-pointer text-sm"
+              >
+                <ImagePlus size={16} />
+                Upload Foto
+              </label>
+              <p className="text-xs text-slate-500 mt-1">JPG, PNG, WEBP. Maks. {MAX_IMAGE_SIZE_MB} MB.</p>
+            </div>
+            {reportImage && (
+              <div className="relative">
+                <img
+                  src={reportImage}
+                  alt="Preview"
+                  className="h-20 w-auto max-w-[160px] rounded-md border border-slate-200 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                  title="Hapus foto"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex gap-3 mt-4">
